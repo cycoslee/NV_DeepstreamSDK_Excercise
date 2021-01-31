@@ -1,0 +1,144 @@
+*****************************************************************************
+* Copyright (c) 2021 NVIDIA Corporation.  All rights reserved.
+*
+* NVIDIA Corporation and its licensors retain all intellectual property
+* and proprietary rights in and to this software, related documentation
+* and any modifications thereto.  Any use, reproduction, disclosure or
+* distribution of this software and related documentation without an express
+* license agreement from NVIDIA Corporation is strictly prohibited.
+*****************************************************************************
+
+This example shows how to do transfer learning for detect wearing face mask or not from a pretrained detectnet_v2 model.
+You could  also see how to convert the transfered model to TensorRT engine by using tlt-convert and test it on a deepstream pipeline. 
+
+============================================== HOST WORK =============================================================
+[How to use Transfer Learning Toolkit]
+
+1. Download Data (face-mask-detection-data folder)
+    1) With Face Mask
+        - Kaggle Medical Mask DB [https://www.kaggle.com/ivandanilovich/medical-masks-dataset-images-tfrecords]
+        - MAsked FAces(MAFA) DB [https://drive.google.com/drive/folders/1nbtM1n0--iZ3VVbNGhocxbnBGhMau_OG]
+    2) Without Face Mask
+        -FDDB DB [http://vis-www.cs.umass.edu/fddb/http://vis-www.cs.umass.edu/fddb/]
+        - WiderFace DB [http://shuoyang1213.me/WIDERFACE/]
+2. Run tlt-streamanalysis container
+    1) $ docker run --gpus all -it -v "/path/to/dir/on/host":"/path/to/dir/in/docker" -p 8888:8888 nvcr.io/nvidia/tlt-streamanalytics:v2.0_py3 bash
+
+3. Clone Facemask repository and install requirements
+    1) # git clonw https://github.com/NVIDIA-AI-IOT/face-mask-detection.git
+    2) # python -m pip install -r requirements.txt
+
+4. Prepare database as a type of KITTI dataset
+    1) First of all, You'd better to build folder hierarchy as following URL shows
+        - URL: https://github.com/NVIDIA-AI-IOT/face-mask-detection/blob/master/data_utils/data-tree.txt
+    2) Run a script which can help to convert your data types to KITTI like structure
+        - # cd face-mask-detection && python3 data2kitti.py --kaggle-dataset-path <kaggle dataset absolute directory path> \
+                                                         --mafa-dataset-path <mafa dataset absolute  directory path> \
+                                                         --fddb-dataset-path < FDDB dataset absolute  directory path> \
+                                                         --widerface-dataset-path <widerface dataset absolute  directory path> \
+                                                         --kitti-base-path < Out directory for storing KITTI formatted annotations > \
+                                                         --category-limit < Category Limit for Masked and No-Mask Faces > \
+                                                         --tlt-input-dims_width < tlt input width > \
+                                                         --tlt-input-dims_height <tlt input height > \
+                                                         --train < for generating training dataset >
+
+5. Prepare tfrecords from kitti format dataset
+    1) # tlt-dataset-convert -d tlt_specs/detectnet_v2_tfrecords_kitti_trainval.txt -o {face-mask-detection-data}/tfrecords/kitti_trainval/kitti_trainval
+
+6. Download pre-trained model
+    1) # ngc registry model list nvidia/tlt_pretrained_detectnet_v2:*
+    2) # mkdir -p models/pretrained
+    3) # ngc registry model download-version nvidia/tlt_pretrained_detectnet_v2:resnet18 --dest models/pretrained_resnet18
+
+7. Provide training specification
+    1) # vi tlt_specs/detectnet_v2_train_resnet18_kitti.txt
+
+8. Run TLT training
+    1) # tlt-train detectnet_v2 -e tlt_specs/detectnet_v2_train_resnet18_kitti.txt \
+                                   -r models/unpruned \
+                                   -k tlt_encode \
+                                   -n resnet18_detector \
+                                   --gpus ${NUM_GPUs}
+
+9. Evaluate the trained model
+    1) # tlt-evaluate detectnet_v2 -e tlt_specs/detectnet_v2_train_resnet18_kitti.txt \
+                           -m models/retrain/weights/resnet18_detector.tlt \
+                           -k tlt_encode
+
+10. Prune the model
+    1) # mkdir models/pruned
+    2) # tlt-prune -m models/unpruned/weights/resnet18_detector.tlt \
+           -o models/pruned/resnet18_nopool_bn_detectnet_v2_pruned.tlt \
+           -eq union \
+           -pth 0.8 \
+           -k tlt_encode
+
+11. Retrain the pruned model
+    1) # tlt-train detectnet_v2 -e tlt_specs/detectnet_v2_retrain_resnet18_kitti.txt \
+                        -r models/retrain \
+                        -k tlt_encode \
+                        -n resnet18_detector_pruned \
+                        --gpus ${NUM_GPUS}
+
+12. Evaluate the retrained model
+    1) # tlt-evaluate detectnet_v2 -e tlt_specs/detectnet_v2_retrain_resnet18_kitti.txt \
+                           -m models/retrain/weights/resnet18_detector_pruned.tlt \
+                           -k tlt_encode
+
+13. Generate Calibration data to do int8 optimization and export
+    1) # tlt-int8-tensorfile detectnet_v2 -e tlt_specs/detectnet_v2_retrain_resnet18_kitti.txt \
+                                          -m 40 \
+                                          -o models/trt/calibration.tensor
+    2) # rm -rf models/trt/resnet18_detector.etlt
+       # rm -rf models/trt/calibration.bin
+    3) # tlt-export detectnet_v2 \
+                           -m models/retrain/weights/resnet18_detector_pruned.tlt \
+                           -o models/trt/resnet18_detector.etlt \
+                           -k tlt_encode  \
+                           --cal_data_file models/calibration.tensor \
+                           --data_type int8 \
+                           --batches 20 \
+                           --batch_size 4 \
+                           --max_batch_size 4\
+                           --engine_file models/trt/resnet18_detector.trt.int8 \
+                           --cal_cache_file models/trt/calibration.bin \
+                           --verbose
+
+14. Copy calibration.bin and resnet18_detector.etlt to the client(Jetson)
+
+
+============================================== CLIENT WORK =============================================================
+[How to convert tlt engine to trt engine]
+1. Copy the Calibration.bin and resnet18_detector.etlt file to $(pwd)/models
+2. Build TensorRT engine by using tlt-convert
+    1) You can find the tlt-converter for Jetson with the following URL
+        (for jetpack4.4 TensorRT 7.1) https://developer.nvidia.com/assets/TLT/Secure/tlt-converter-7.1-dla.zip
+        (for other version) check this page : developer.nvidia.com/tlt-getting-started
+    2) Unzip and copy to /usr/bin
+    3) # tlt-converter $USER_EXPERIMENT_DIR/experiment_dir_final/resnet18_detector.etlt \
+                                                -k tlt_encode \
+                                                -c models/calibration.bin \
+                                                -o output_cov/Sigmoid,output_bbox/BiasAdd \
+                                                -d 3,544,960 \
+                                                -i nchw \
+                                                -m 64 \
+                                                -t int8 \
+                                                -e models/resnet18_detector.trt \
+                                                -b 4
+3. Fix TRT engine and calibration file path on "pgie_masknet_v2_tlt_config.txt"
+4. Build and run
+    1) make clean
+    2) make
+    3) test_ds_tlt_facemask -c pgie_masknet_v2_tlt_config.txt -d -w /dev/video0
+
+This example shows how to capture from imaging device or read from files and you can deploy mask wearing detection throught the pipeline and get logs if someone who has been shown without mask. Both storing file and viewing through x-window are supported by this application
+
+
+
+Pipeline :
+                                                                        nvdsosd > nvstreammuxtistreamtiler > nvegltransform > nveglglessink
+                                                             Logging < (sink pad)
+                                                                           ^
+filesrc > h264parse > nvv4l2decoder > tee > nvstreammux > nvinfer > nvvideoconvert >
+                                              ^
+v4l2src > capsfilter > nvvideoconvert > capsfilter

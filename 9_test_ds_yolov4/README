@@ -1,0 +1,47 @@
+*****************************************************************************
+* Copyright (c) 2021 NVIDIA Corporation.  All rights reserved.
+*
+* NVIDIA Corporation and its licensors retain all intellectual property
+* and proprietary rights in and to this software, related documentation
+* and any modifications thereto.  Any use, reproduction, disclosure or
+* distribution of this software and related documentation without an express
+* license agreement from NVIDIA Corporation is strictly prohibited.
+*****************************************************************************
+
+1. Get YOLOv4 from following git repository
+    # git clone https://github.com/Tianxiaomo/pytorch-YOLOv4.git
+
+2. Download yolov4.cfg and yolov4.weight as the guide on the repository README
+
+3. Convert darknet model to ONNX model
+   (Notice) If you don't want to through 1.~3. just jump with downloading the onnx file(URL:  
+https://drive.google.com/drive/folders/1LJNzaWE4idfyAhrro7aNlvy1ME3luHFa?usp=sharing ).
+            And un-tar to the model folder.
+
+4. Convert onnx model to TRT engine by using trtexec
+    # /usr/src/tensorrt/bin/trtexec --onnx=yolo.onnx --explicitBatch --saveEngine=yolo.engine --fp16
+    # mkdir model
+    # mv yolo.engine model
+
+5. Make custom plugins by using objectDetector_Yolo and given patch (nvdsinfer_custom_impl_Yolo.patch)
+   that includes YOLOv4 helper functions
+    # cp nvdsinfer_custom_impl_Yolo.patch /opt/nvidia/deepstream/deepstream-5.0/sources/objectDetector_Yolo
+    # cd /opt/nvidia/deepstream/deepstream-5.0/sources/objectDetector_Yolo
+    # patch -p1 < nvdsinfer_custom_impl_Yolo.patch
+    # cd nvdsinfer_custom_impl_Yolo
+    # make
+    > then, you can find libnvdsinfer_custom_impl_Yolo.so
+    # cp libnvdsinfer_custom_impl_Yolo.so /opt/nvidia/deepstream/deepstream-5.0/sources/apps/sample_apps/7_test_ds_yolov4
+
+6. Set proper path and file-name to configuration file
+    a) config_infer_primary_yoloV4.txt    >> model-engine-file=model/yolo.engine
+    b) deepstream_app_config_yoloV4.txt   >> model-engine-file=model/yolo.engine
+
+7. Change Source method
+
+8. Run application
+    # deepstream-app -c deepstream_app_config_yoloV4.txt 
+
+(NOTICE)
+% If you couldn't have deepstream-app executable on your environment.
+  No worry, just build it in the the deepstream-app and use the executable.

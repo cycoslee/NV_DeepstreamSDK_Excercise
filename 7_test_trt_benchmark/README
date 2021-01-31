@@ -1,0 +1,77 @@
+*****************************************************************************
+* Copyright (c) 2021 NVIDIA Corporation.  All rights reserved.
+*
+* NVIDIA Corporation and its licensors retain all intellectual property
+* and proprietary rights in and to this software, related documentation
+* and any modifications thereto.  Any use, reproduction, disclosure or
+* distribution of this software and related documentation without an express
+* license agreement from NVIDIA Corporation is strictly prohibited.
+*****************************************************************************
+This Example has been referenced from the NVIDIA git repository.
+( URL: https://github.com/NVIDIA-AI-IOT/jetson_benchmarks )
+You can check how to use "trtexec" to generate TRT engine and do benchmark with it.
+
+# Benchmarks Targeted for Jetson Xavier NX (Using GPU+2DLA)
+The script will run following Benchmarks:
+    - Names             : Input Image Resolution
+    - Inception V4      : 299x299
+    - ResNet-50         : 224x224
+    - YOLO-V3           : 608x608
+    - Super Resolution  : 481x321
+    - Unet              : 256x256
+
+For benchmark results on all NVIDIA Jetson Products
+please have a look at the site("https://developer.nvidia.com/embedded/jetson-benchmarks"
+And you can even find example results in the path "$(pwd)/results"
+
+Following scripts are included:
+    1. Install Requirements for running benchmark script (install_requirements.sh)
+    2. CSV files containing parameters (benchmark_csv folder)
+    3. Download Model (utils/download_models.py)
+    4. Running Benchmark Script (benchmarks.py)
+
+
+# Version Dependencies:
+    - JetPack 4.4
+    - TensorRT 7
+
+# Set up instructions
+    $ git clone https://github.com/NVIDIA-AI-IOT/jetson_benchmarks.git
+    $ cd jetson_benchmarks
+    $ mkdir models
+
+# Install Requirements
+    $ sh install_requirements.sh
+(Note: All libraries will be installed for python3)
+
+# Download Models
+    $ python3 utils/download_models.py --all --csv_file_path <path-to>/benchmark_csv/nx-benchmarks.csv --save_dir <absolute-path-to-downloaded-models>
+    ex) $ python3 utils/download_models.py --all --csv_file_path /workspace/deepstream_excercies/7_test_trt_benchmark/benchmark_csv/nx-benchmarks.csv --save_dir /workspace/deepstream_excercies/7_test_trt_benchmark/models
+
+# Set Benchmark mode ON/OFF (Outside of container)
+    (ON)  $ sudo python3 benchmark_setup.py --benchmark_mode 1
+    (OFF) $ sudo python3 benchmark_setup.py --benchmark_mode 0
+
+# Running Benchmarks
+    - Running All Benchmark Models at Once
+        $ python3 benchmark.py --all --csv_file_path <path-to>/benchmark_csv/nx-benchmarks.csv --model_dir <absolute-path-to-downloaded-models>
+        ex) $ python3 benchmark.py --all --csv_file_path /workspace/deepstream_excercies/7_test_trt_benchmark/benchmark_csv/nx-benchmarks.csv --model_dir /workspace/deepstream_excercies/7_test_trt_benchmark/models
+
+    - Running Individual Benchmark Model
+        1. For Inception V4
+            $ python3 benchmark.py --model_name inception_v4 --csv_file_path <path-to>/benchmark_csv/nx-benchmarks.csv --model_dir <absolute-path-to-downloaded-models>
+
+        2. For Super Resolution
+            $ python3 benchmark.py --model_name super_resolution --csv_file_path <path-to>/benchmark_csv/nx-benchmarks.csv --model_dir <absolute-path-to-downloaded-models>
+
+        3. For UNET Segmentation
+            $ python3 benchmark.py --model_name unet --csv_file_path <path-to>/benchmark_csv/nx-benchmarks.csv --model_dir <absolute-path-to-downloaded-models>
+
+        4. For Tiny-YOLO-V3
+            $ python3 benchmark.py --model_name tiny-yolov3 --csv_file_path <path-to>/benchmark_csv/nx-benchmarks.csv --model_dir <absolute-path-to-downloaded-models>
+
+        5. For ResNet-50
+            $ python3 benchmark.py --model_name resnet --csv_file_path <path-to>/benchmark_csv/nx-benchmarks.csv --model_dir <absolute-path-to-downloaded-models>
+
+        6. For SSD-MobileNet-V1 Segmentation
+            $ python3 benchmark.py --model_name ssd-mobilenet-v1 --csv_file_path <path-to>/benchmark_csv/nx-benchmarks.csv --model_dir <absolute-path-to-downloaded-models>

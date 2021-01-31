@@ -1,0 +1,77 @@
+root@jonghwanl-jetsonnx:/opt/nvidia/deepstream/deepstream/sources/apps/sample_apps/8_test_trt_benchmark# python3 benchmark.py --all --csv_file_path /opt/nvidia/deepstream/deepstream/sources/apps/sample_apps/8_test_trt_benchmark/benchmark_csv/nx-benchmarks.csv --model_dir /opt/nvidia/deepstream/deepstream/sources/apps/sample_apps/8_test_trt_benchmark/models
+Please close all other applications and Press Enter to continue...
+Running all benchmarks.. This would take long time if the trt engine is not prepared...
+------------Executing inception_v4------------
+
+inception_v4_b2_ws2048_gpu.engine file already exists. will use as is.
+inception_v4_b1_ws1024_dla1.engine file already exists. will use as is.
+inception_v4_b1_ws1024_dla2.engine file already exists. will use as is.
+--------------------------
+
+Model Name: inception_v4
+FPS:317.92
+
+--------------------------
+
+------------Executing super_resolution_bsd500------------
+
+super_resolution_bsd500_b2_ws2048_gpu.engine file already exists. will use as is.
+--------------------------
+
+Model Name: super_resolution_bsd500
+FPS:152.12
+
+--------------------------
+
+------------Executing unet-segmentation------------
+
+unet-segmentation_b2_ws2048_gpu.engine file already exists. will use as is.
+--------------------------
+
+Model Name: unet-segmentation
+FPS:148.25
+
+--------------------------
+
+------------Executing yolov3-tiny-416------------
+
+yolov3-tiny-416_b8_ws2048_gpu.engine file already exists. will use as is.
+--------------------------
+
+Model Name: yolov3-tiny-416
+FPS:556.41
+
+--------------------------
+
+------------Executing ResNet50_224x224------------
+
+ResNet50_224x224_b4_ws2048_gpu.engine file already exists. will use as is.
+ResNet50_224x224_b2_ws1024_dla1.engine file already exists. will use as is.
+ResNet50_224x224_b2_ws1024_dla2.engine file already exists. will use as is.
+--------------------------
+
+Model Name: ResNet50_224x224
+FPS:866.61
+
+--------------------------
+
+------------Executing ssd-mobilenet-v1------------
+
+ssd-mobilenet-v1_b8_ws2048_gpu.engine file already exists. will use as is.
+ssd-mobilenet-v1_b2_ws1024_dla1.engine file already exists. will use as is.
+ssd-mobilenet-v1_b2_ws1024_dla2.engine file already exists. will use as is.
+--------------------------
+
+Model Name: ssd-mobilenet-v1
+FPS:887.42
+
+--------------------------
+
+                Model Name         FPS
+0             inception_v4  317.924917
+1  super_resolution_bsd500  152.118646
+2        unet-segmentation  148.245192
+3          yolov3-tiny-416  556.410331
+4         ResNet50_224x224  866.609455
+5         ssd-mobilenet-v1  887.422532
+
