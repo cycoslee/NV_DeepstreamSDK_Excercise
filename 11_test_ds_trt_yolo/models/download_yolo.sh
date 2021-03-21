@@ -24,17 +24,17 @@
 
 set -e
 ## Download yolo weights
-## For yolo v2,
+## [yolov2]
 #echo "Downloading yolov2 config and weights files ... "
 #wget https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov2.cfg -q --show-progress
 #wget https://pjreddie.com/media/files/yolov2.weights -q --show-progress
 #
-## For yolo v2 tiny,
+## [yolov2-tiny]
 #echo "Downloading yolov2-tiny config and weights files ... "
 #wget https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov2-tiny.cfg -q --show-progress
 #wget https://pjreddie.com/media/files/yolov2-tiny.weights -q --show-progress
 
-# For yolo v3,
+# [yolov3]
 echo "Downloading yolov3 config and weights files ... "
 wget https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov3.cfg -q --show-progress
 wget https://pjreddie.com/media/files/yolov3.weights -q --show-progress
@@ -51,7 +51,7 @@ cat yolov3.cfg | sed -e '6s/batch=64/batch=1/' | sed -e '8s/width=608/width=608/
 echo >> yolov3-608.cfg
 ln -sf yolov3.weights yolov3-608.weights
 
-# For yolo v3 tiny,
+# [yolov3-tiny]
 echo "Downloading yolov3-tiny config and weights files ... "
 wget https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov3-tiny.cfg -q --show-progress
 wget https://pjreddie.com/media/files/yolov3-tiny.weights -q --show-progress
@@ -68,7 +68,43 @@ cat yolov3-tiny.cfg | sed -e '3s/batch=1/batch=1/' | sed -e '8s/width=416/width=
 echo >> yolov3-tiny-608.cfg
 ln -sf yolov3-tiny.weights yolov3-tiny-608.weights
 
-##[yolov4x-Mish]
+# [yolov4]
+echo
+echo "Download and set for yolov4 models"
+wget -O yolov4.cfg https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov4.cfg -q --show-progress --no-clobber
+wget -O yolov4.weights https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights -q --show-progress --no-clobber
+echo "Creating yolov4-288.cfg and yolov4-288.weights"
+cat yolov4.cfg | sed -e '2s/batch=64/batch=1/' | sed -e '5s/width=608/width=288/' | sed -e '6s/height=608/height=288/' > yolov4-288.cfg
+echo >> yolov4-288.cfg
+ln -sf yolov4.weights yolov4-288.weights
+echo "Creating yolov4-416.cfg and yolov4-416.weights"
+cat yolov4.cfg | sed -e '2s/batch=64/batch=1/' | sed -e '5s/width=608/width=416/' | sed -e '6s/height=608/height=416/' > yolov4-416.cfg
+echo >> yolov4-416.cfg
+ln -sf yolov4.weights yolov4-416.weights
+echo "Creating yolov4-608.cfg and yolov4-608.weights"
+cat yolov4.cfg | sed -e '2s/batch=64/batch=1/' | sed -e '5s/width=608/width=608/' | sed -e '6s/height=608/height=608/' > yolov4-608.cfg
+echo >> yolov4-608.cfg
+ln -sf yolov4.weights yolov4-608.weights
+
+# [yolov4-tiny]
+echo
+echo "Download and set for yolov4-tiny models"
+wget -O yolov4-tiny.cfg https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov4-tiny.cfg -q --show-progress --no-clobber
+wget -O yolov4-tiny.weights https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_pre/yolov4-tiny.weights -q --show-progress --no-clobber
+echo "Creating yolov4-tiny-288.cfg and yolov4-tiny-288.weights"
+cat yolov4-tiny.cfg | sed -e '6s/batch=64/batch=1/' | sed -e '8s/width=416/width=288/' | sed -e '9s/height=416/height=288/' > yolov4-tiny-288.cfg
+echo >> yolov4-tiny-288.cfg
+ln -sf yolov4-tiny.weights yolov4-tiny-288.weights
+echo "Creating yolov4-tiny-416.cfg and yolov4-tiny-416.weights"
+cat yolov4-tiny.cfg | sed -e '6s/batch=64/batch=1/' | sed -e '8s/width=416/width=416/' | sed -e '9s/height=416/height=416/' > yolov4-tiny-416.cfg
+echo >> yolov4-tiny-416.cfg
+ln -sf yolov4-tiny.weights yolov4-tiny-416.weights
+echo "Creating yolov4-tiny-608.cfg and yolov4-tiny-608.weights"
+cat yolov4-tiny.cfg | sed -e '6s/batch=64/batch=1/' | sed -e '8s/width=416/width=608/' | sed -e '9s/height=416/height=608/' > yolov4-tiny-608.cfg
+echo >> yolov4-tiny-608.cfg
+ln -sf yolov4-tiny.weights yolov4-tiny-608.weights
+
+## [yolov4x-Mish]
 #echo
 #echo "Download and set for yolov4x-mish models"
 #wget -O yolov4x-mish.cfg https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov4x-mish.cfg -q --show-progress --no-clobber

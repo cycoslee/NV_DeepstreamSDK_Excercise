@@ -8,3 +8,4 @@ class Mish(nn.Module):
 
     def forward(self, x):
         x = x * (tanh(softplus(x)))
+        return x

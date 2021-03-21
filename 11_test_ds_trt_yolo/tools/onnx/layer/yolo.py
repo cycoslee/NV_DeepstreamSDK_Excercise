@@ -135,7 +135,6 @@ def yolo_forward_dynamic(output, conf_thresh, num_classes, anchors, num_anchors,
     # boxes:     [batch, num_anchors * H * W, 1, 4]
     # cls_confs: [batch, num_anchors * H * W, num_classes]
     # det_confs: [batch, num_anchors * H * W]
-
     det_confs = det_confs.view(output.size(0), num_anchors * output.size(2) * output.size(3), 1)
     confs = cls_confs * det_confs
 

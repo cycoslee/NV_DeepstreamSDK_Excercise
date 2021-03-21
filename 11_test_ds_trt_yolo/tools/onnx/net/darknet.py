@@ -1,8 +1,8 @@
 import torch.nn as nn
 import numpy as np
+from tools.utils import get_region_boxes
 from torch.nn.functional import relu, leaky_relu 
 from torch import IntTensor, cat, from_numpy
-
 from tools.onnx.net.darknet_cfg import Darknet_cfg
 from tools.onnx.layer.region_loss import RegionLoss
 from tools.onnx.layer.yolo import Yolo
@@ -10,6 +10,7 @@ from tools.onnx.layer.maxpool import MaxPool
 from tools.onnx.layer.empty import Empty
 from tools.onnx.layer.upsample import Upsample_expand
 from tools.onnx.layer.load_layer import *
+from tools.onnx.layer.activation import Mish
 
 # support route shortcut and reorg
 class Darknet(nn.Module):
@@ -44,6 +45,7 @@ class Darknet(nn.Module):
             if block['type'] == 'net':
                 continue
             elif block['type'] in ['convolutional', 'maxpool', 'reorg', 'upsample', 'avgpool', 'softmax', 'connected']:
+                print("INDEX : %d"%ind)
                 x = self.models[ind](x)
                 outputs[ind] = x
             elif block['type'] == 'route':
@@ -100,7 +102,7 @@ class Darknet(nn.Module):
                 continue
             else:
                 print('unknown type %s' % (block['type']))
-        get_region_boxes(out_boxes)
+        return get_region_boxes(out_boxes)
 
     def print_network(self):
         self.darknet.print_cfg()

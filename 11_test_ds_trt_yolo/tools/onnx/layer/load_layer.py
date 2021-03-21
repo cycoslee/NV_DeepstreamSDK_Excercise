@@ -33,5 +33,3 @@ def load_fc(buf, start, fc_model):
     start = start + num_w
     return start
 
-
-
