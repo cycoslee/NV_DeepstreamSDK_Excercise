@@ -1,0 +1,110 @@
+{
+    "$schema": "https://nvidia.com/jonghwanl_trt/onnx_surgery request format", 
+    "title": "ONNX Graph Surgeon request format",
+    "description": "You can do surgeon with this json request format",
+    "type": "object",
+    "properties": {
+	"additionalProperties": false,
+	"anyOf": {
+	    "add_node_req": {
+                "description": "ADD_NODE_REQ object is for adding a node into the graph",
+	        "type": "object",
+	        "items":[{"$ref":"#/def_request/add_request"}]
+	    },
+	    "delete_node_req": {
+                "description": "DELETE_NODE_REQ object is for deleting a node into the graph",
+	        "type": "object",
+	        "items":[{"$ref":"#/def_request/delete_request"}]
+	    },
+	    "change_node_req": {
+                "description": "CHANGE_NODE_REQ object is for changing a node into the graph",
+	        "type": "object",
+	        "items":[{"$ref":"#/def_request/change_request"}]
+	    }
+	}
+    },
+    "def_request": {
+	"add_request":{
+	     "type":"object",
+	     "properties":{
+	         "additionalProperties": false,
+	        "node_optype":  {
+	            "description": "ONNX base op type or TensorRT custom plugin type (All supports refer to TensorRT)",
+		    "$ref": "#/def_optype/op_type"},
+	        "node_name":    { "type": "string", "$comment": "Graph Node's Name, it could be output tensor name" },
+	        "input_name":   { "type": "array",  "$comment": "Input nodes of the surgery target node" },
+	        "output_name":  { "type": "array",  "$comment": "Onput nodes of the surgery target node" },
+	        "node_op_param":{
+	            "$comment": "It needs to have node parameter what the TensorRT parser can read propery for supporting layers",
+		    "$ref": "#/def_optype/op_param"
+		}
+	     },
+             "required":     ["node_optype", "input_name", "node_param"]
+	},
+	"delete_request":{
+	     "type":"object",
+	     "properties":{
+	         "additionalProperties": false,
+	         "node_optype":  {
+	             "description": "ONNX base op type or TensorRT custom plugin type (All supports refer to TensorRT)",
+		     "$ref": "#/def_optype/op_type"},
+	         "node_name":    { "type": "string", "$comment": "Graph Node's Name, it could be output tensor name" },
+	         "input_name":   { "type": "array",  "$comment": "Input nodes of the surgery target node" },
+	         "output_name":  { "type": "array",  "$comment": "Onput nodes of the surgery target node" },
+	         "node_op_param":{
+	             "$comment": "It needs to have node parameter what the TensorRT parser can read propery for supporting layers",
+		     "$ref": "#/def_op_param/op_param"
+		 }
+	     },
+	     "required":    ["node_name", "input_name", "output_name"] 
+	},
+	"change_request":{
+	     "type":"object",
+	     "properties":{
+	         "additionalProperties": false,
+	         "node_optype":      {
+	             "description": "ONNX base op type or TensorRT custom plugin type (All supports refer to TensorRT)",
+		     "$ref": "#/def_optype/op_type" },
+	         "new_node_name":    { "type": "string", "$comment": "New Graph Node's Name, it could be output tensor name" },
+	         "target_node_name": { "type": "string", "$comment": "Target Graph Node's Name, it could be output tensor name" },
+	         "input_name":       { "type": "array",  "$comment": "Input nodes of the surgery target node" },
+	         "output_name":      { "type": "array",  "$comment": "Onput nodes of the surgery target node" },
+	         "node_op_param":    {
+	             "$comment": "It needs to have node parameter what the TensorRT parser can read propery for supporting layers",
+		     "$ref": "#/def_op_type/op_param" }
+	     },
+	     "required":    ["new_node_name", "target_node_name", "input_name", "output_name", "node_param"] 
+	}
+    },
+    "def_optype": {
+        "op_type": {
+            "type": "string"
+	}
+    },
+    "def_op_param": {
+	"op_param": {
+            "properties":{
+		"ondOf": {
+                    "BatchedNMSParam":{
+            	        "type": "object",
+		        "properties":{
+		    	"additionalProperties": false,
+	                    "shareLocation":     { "type": "number" },
+	    	            "backgroundLabelId": { "type": "number" },
+	    	            "numClasses":        { "type": "number" },
+	    	            "numAnchors":        { "type": "number" },
+	                    "topK":              { "type": "number" },
+	    	            "keepTopK":          { "type": "number" },
+	    	            "scoreThreshold":    { "type": "number" },
+	    	            "iouThreshold":      { "type": "number" },
+	    	            "isNormalized":      { "type": "number" },
+	    	            "clipBoxes":         { "type": "number" },
+	    	            "dynamicBatch":      { "type": "boolean"}
+		        },
+		        "minProperties": 11
+                    }
+		}
+            }
+	}
+    }
+}

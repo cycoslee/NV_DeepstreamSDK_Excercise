@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-#define USE_CUDA_ENGINE_GET_API 1
+#define USE_CUDA_ENGINE_GET_API 0
 
 static bool getYoloNetworkInfo (NetworkInfo &networkInfo, const NvDsInferContextInitParams* initParams)
 {

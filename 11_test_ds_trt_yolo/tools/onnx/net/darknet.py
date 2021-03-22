@@ -279,10 +279,6 @@ class Darknet(nn.Module):
                     yolo_layer.scale_x_y = float(block['scale_x_y'])
                 else:
                     yolo_layer.scale_x_y = float(1.0)
-                # yolo_layer.object_scale = float(block['object_scale'])
-                # yolo_layer.noobject_scale = float(block['noobject_scale'])
-                # yolo_layer.class_scale = float(block['class_scale'])
-                # yolo_layer.coord_scale = float(block['coord_scale'])
                 out_filters.append(prev_filters)
                 out_strides.append(prev_stride)
                 models.append(yolo_layer)

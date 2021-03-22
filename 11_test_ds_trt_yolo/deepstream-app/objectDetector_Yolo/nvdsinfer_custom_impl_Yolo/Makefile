@@ -20,17 +20,13 @@
 # DEALINGS IN THE SOFTWARE.
 ################################################################################
 
-CUDA_VER?=
-ifeq ($(CUDA_VER),)
-  $(error "CUDA_VER is not set")
-endif
 CC:= g++
-NVCC:=/usr/local/cuda-$(CUDA_VER)/bin/nvcc
+NVCC:=/usr/local/cuda/bin/nvcc
 
 CFLAGS:= -Wall -std=c++11 -shared -fPIC -Wno-error=deprecated-declarations
-CFLAGS+= -I../../includes -I/usr/local/cuda-$(CUDA_VER)/include
+CFLAGS+= -I../../includes -I/usr/local/cuda/include
 
-LIBS:= -lnvinfer_plugin -lnvinfer -lnvparsers -L/usr/local/cuda-$(CUDA_VER)/lib64 -lcudart -lcublas -lstdc++fs
+LIBS:= -lnvinfer_plugin -lnvinfer -lnvparsers -L/usr/local/cuda/lib64 -lcudart -lcublas -lstdc++fs
 LFLAGS:= -shared -Wl,--start-group $(LIBS) -Wl,--end-group
 
 INCS:= $(wildcard *.h)
@@ -57,4 +53,4 @@ $(TARGET_LIB) : $(TARGET_OBJS)
 	$(CC) -o $@  $(TARGET_OBJS) $(LFLAGS)
 
 clean:
-	rm -rf $(TARGET_LIB)
+	rm -rf $(TARGET_LIB) $(TARGET_OBJS)

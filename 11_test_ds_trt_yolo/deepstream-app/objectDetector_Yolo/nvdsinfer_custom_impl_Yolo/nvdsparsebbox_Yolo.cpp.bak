@@ -62,13 +62,6 @@ extern "C" bool NvDsInferParseCustomYoloTLT(
     NvDsInferParseDetectionParams const& detectionParams,
     std::vector<NvDsInferParseObjectInfo>& objectList);
 
-extern "C" bool NvDsInferParseJonghwanlYoloV3(
-    std::vector<NvDsInferLayerInfo> const& outputLayersInfo,
-    NvDsInferNetworkInfo const& networkInfo,
-    NvDsInferParseDetectionParams const& detectionParams,
-    std::vector<NvDsInferParseObjectInfo>& objectList);
-
-
 /* This is a sample bounding box parsing function for the sample YoloV3 detector model */
 static NvDsInferParseObjectInfo convertBBox(const float& bx, const float& by, const float& bw,
                                      const float& bh, const int& stride, const uint& netW,
@@ -428,49 +421,9 @@ extern "C" bool NvDsInferParseCustomYoloTLT(
     return true;
 }
 
-extern "C" bool NvDsInferParseJonghwanlYoloV3(
-    std::vector<NvDsInferLayerInfo> const& outputLayersInfo,
-    NvDsInferNetworkInfo const& networkInfo,
-    NvDsInferParseDetectionParams const& detectionParams,
-    std::vector<NvDsInferParseObjectInfo>& objectList)
-{
-    const int* num_detections = static_cast <const int*>(outputLayersInfo.at(0).buffer);
-    const float* nms_boxes    = static_cast <const float*>(outputLayersInfo.at(1).buffer);
-    const float* nms_scores   = static_cast <const float*>(outputLayersInfo.at(2).buffer);
-    const float* nms_classes  = static_cast <const float*>(outputLayersInfo.at(3).buffer);
-
-    for(int i = 0; i < num_detections[0]; ++i)
-    {
-	const float* _rect  = &nms_boxes[0]   + (i * 4);
-	const float* _score = &nms_scores[0]  + i;
-	const float* _class = &nms_classes[0] + i;
-
-        if(_score[0] > 1.001){ continue; }
-
-        if((_rect[0] < 0) || (_rect[1] < 0) || (_rect[2] < 0) || (_rect[3] < 0)){ continue; }
-
-        if((_rect[0] > networkInfo.width) || (_rect[2] > networkInfo.width) || \
-           (_rect[1] > networkInfo.height) || (_rect[3] > networkInfo.width)){ continue; }
-
-        if((_rect[2] < _rect[0]) || (_rect[3] < _rect[1])){ continue; }
-
-        if(((_rect[3] - _rect[1]) > networkInfo.height) || ((_rect[2]-_rect[0]) > networkInfo.width))
-            continue;
-		   
-	NvDsInferParseObjectInfo obj{ static_cast<unsigned int>(_class[0]), \
-                                        _rect[0], _rect[1], (_rect[2]-_rect[0]), (_rect[3]-_rect[1]), \
-				        _score[0] };
-	std::cerr << "Class ID= "<< _class[0] <<"," << "Score= "<< _score[0] <<std::endl \
-	          << "[x,y,w,h] = ["<<_rect[0]<<"," <<_rect[1]<<"," <<_rect[2]<<"," <<_rect[3] <<"]" << std::endl;
-   	objectList.push_back(obj);
-    }
-
-    return true;
-}
 /* Check that the custom function has been defined correctly */
 CHECK_CUSTOM_PARSE_FUNC_PROTOTYPE(NvDsInferParseCustomYoloV3);
 CHECK_CUSTOM_PARSE_FUNC_PROTOTYPE(NvDsInferParseCustomYoloV3Tiny);
 CHECK_CUSTOM_PARSE_FUNC_PROTOTYPE(NvDsInferParseCustomYoloV2);
 CHECK_CUSTOM_PARSE_FUNC_PROTOTYPE(NvDsInferParseCustomYoloV2Tiny);
 CHECK_CUSTOM_PARSE_FUNC_PROTOTYPE(NvDsInferParseCustomYoloTLT);
-CHECK_CUSTOM_PARSE_FUNC_PROTOTYPE(NvDsInferParseJonghwanlYoloV3);

@@ -1,8 +1,43 @@
+# utils.py
+
+#############################################################################
+#  Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved.             #
+#                                                                           #
+#  Licensed under the Apache License, Version 2.0 (the "License");          #
+#  you may not use this file except in compliance with the License.         #
+#  You may obtain a copy of the License at                                  #
+#                                                                           #
+#      http://www.apache.org/licenses/LICENSE-2.0                           #
+#                                                                           #
+#  Unless required by applicable law or agreed to in writing, software      #
+#  distributed under the License is distributed on an "AS IS" BASIS,        #
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. #
+#  See the License for the specific language governing permissions and      #
+#  limitations under the License.                                           #
+#############################################################################
+
 import time
 import math
 import numpy as np
 from torch import cat
 
+# Function for getting input dimension
+def get_input_dim(model_name):
+    """Get input_width and input_height of the model."""
+    yolo_dim = model_name.split('_')
+    if len(yolo_dim) <= 4:
+        raise ValueError('ERROR: bad name format, please make sure that the onnx name rule for this automated program!!!')
+
+    w  = int(yolo_dim[4])
+    h  = int(yolo_dim[3]) 
+    ch = int(yolo_dim[2])
+    b  = int(yolo_dim[1])
+
+    if h % 32 != 0 or w % 32 != 0:
+        raise ValueError('ERROR: bad yolo_dim (%s)!' % yolo_dim)
+    return [b, ch, h, w]
+
+# Function for drawing Detector's output
 def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
     import cv2
     img = np.copy(img)
@@ -47,6 +82,7 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
         cv2.imwrite(savename, img)
     return img
 
+# Function to read Label file
 def load_class_names(namesfile):
     class_names = []
     with open(namesfile, 'r') as fp:
@@ -56,10 +92,10 @@ def load_class_names(namesfile):
         class_names.append(line)
     return class_names
 
+# Function for get the output of Yolo models
 def get_region_boxes(boxes_and_confs):
 
     # print('Getting boxes from boxes and confs ...')
-
     boxes_list = []
     confs_list = []
 
@@ -74,6 +110,7 @@ def get_region_boxes(boxes_and_confs):
         
     return [boxes, confs]
 
+# Function for Non maximum suppression (CPU utilization)
 def nms_cpu(boxes, confs, nms_thresh=0.5, min_mode=False):
     # print(boxes.shape)
     x1 = boxes[:, 0]
@@ -110,8 +147,9 @@ def nms_cpu(boxes, confs, nms_thresh=0.5, min_mode=False):
     
     return np.array(keep)
 
-def post_processing(img, conf_thresh, nms_thresh, output):
 
+# Yolo test helper function for post part
+def post_processing(img, conf_thresh, nms_thresh, output):
     # anchors = [12, 16, 19, 36, 40, 28, 36, 75, 76, 55, 72, 146, 142, 110, 192, 243, 459, 401]
     # num_anchors = 9
     # anchor_masks = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
