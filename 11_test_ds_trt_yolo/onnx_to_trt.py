@@ -83,15 +83,17 @@ def main():
 
     model_name = None
     onnx_model = None
+    dynamic_batch = False
 
     # Exceptions
     if (args.precision == "INT8") and (args.calib_dataset is None):
         parser.error("--INT8 needs --calib_dataset.")
     if len(args.batch) != 3:
         parser.error("batch needs to have 3 element [MIN OPT MAX] for dynamic and [MAX MAX MAX] for static")
-    if "DLA" in args.gpu_core:
-        if not (args.batch[0] == args.batch[2]):
+    if not (args.batch[0] == args.batch[2]):
+        if "DLA" in args.gpu_core:
             parser.error("For DLA, batch should be ( MIN == OPT == MAX)")
+        dynamic_batch = True
 
     # Version Checking
     print("ONNX version: %s" % onnx_version())
@@ -104,7 +106,7 @@ def main():
         else:
             # Graph Surgeon 
             print("Graph surgery has been requested by JSON files: \n", args.json_for_surgery)
-            gs = GraphSurgery(args.input_model, args.json_for_surgery)
+            gs = GraphSurgery(args.input_model, args.json_for_surgery, dynamic_batch)
 
             if gs.do_graph_surgeon() is False :
                 raise ValueError('ERROR: Graph Surgeon Failed')
@@ -121,8 +123,13 @@ def main():
     engine_path = "trt_output/engine/" 
     calib_path  = "trt_output/calib/"
     engine_name = model_name + "_" + args.gpu_core + "_" + args.precision
-    calib_name  = engine_name + ".cache"
-    engine_name = engine_name + ".trt"
+
+    gs = ""
+    if args.graph_surgoen is True:
+        gs = "_gs"
+
+    calib_name  = engine_name + gs + ".cache"
+    engine_name = engine_name + gs + ".trt"
 
     os.makedirs(engine_path, exist_ok=True)
     os.makedirs(calib_path, exist_ok=True)

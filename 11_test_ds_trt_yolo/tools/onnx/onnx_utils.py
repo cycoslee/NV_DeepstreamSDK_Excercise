@@ -35,10 +35,10 @@ def load_onnx(model_name):
     print('Loading the ONNX file...')
     onnx = ""
     if not os.path.isfile(model_name):
-        raise SystemExit('ERROR: Couldn''t find ONNX file in %s.'%(model_name))
+        raise SystemExit('ERROR: Could not find ONNX file in %s'%(model_name))
     else:
         with open(model_name, 'rb') as f:
-        return f.read()
+            return f.read()
 
 # Showing ONNX graph function
 def show_onnx_graph(graph):
@@ -50,7 +50,7 @@ def check_onnx_model(onnx_model):
 
 # A Class for the ONNX graph surgery 
 class GraphSurgery():
-    def __init__(self, onnx_model_file, req_jsons):
+    def __init__(self, onnx_model_file, req_jsons, dynamic_batch):
         self.onnx_model_file = onnx_model_file
         self.onnx_model_fixed_file = self.onnx_model_file.split('.onnx')[0] + '_tuned.onnx'
         self.onnx_model = onnx.load(onnx_model_file)
@@ -58,6 +58,7 @@ class GraphSurgery():
         self.req_jsons  = req_jsons
         self.req_json_dicts = []
         self.graph = gs.import_onnx(self.onnx_model) 
+        self.dynamic_batch = dynamic_batch
         self._validate_requests()
 
     def do_graph_surgeon(self):
@@ -117,7 +118,7 @@ class GraphSurgery():
                 'BatchedNMS_TRT': BatchedNMS_TRT
         }
         create_plugin = switcher.get(node_op, lambda: "Invalid Plugin name for adding node")
-        plugin = create_plugin(op_param)
+        plugin = create_plugin(op_param, self.dynamic_batch)
         self.graph = plugin.add_node(self.graph)
 
     def _delete_node(self, del_dict):

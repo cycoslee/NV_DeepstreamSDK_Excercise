@@ -24,19 +24,15 @@ CC:= g++
 NVCC:=/usr/local/cuda/bin/nvcc
 
 CFLAGS:= -Wall -std=c++11 -shared -fPIC -Wno-error=deprecated-declarations
-CFLAGS+= -I../../includes -I/usr/local/cuda/include
+CFLAGS+= -I../includes -I/usr/local/cuda/include
 
 LIBS:= -lnvinfer_plugin -lnvinfer -lnvparsers -L/usr/local/cuda/lib64 -lcudart -lcublas -lstdc++fs
 LFLAGS:= -shared -Wl,--start-group $(LIBS) -Wl,--end-group
 
 INCS:= $(wildcard *.h)
 SRCFILES:= nvdsinfer_yolo_engine.cpp \
-           nvdsparsebbox_Yolo.cpp   \
-           yoloPlugins.cpp    \
-           trt_utils.cpp              \
-           yolo.cpp              \
-           kernels.cu
-TARGET_LIB:= libnvdsinfer_custom_impl_Yolo.so
+           nvdsparsebbox_Yolo.cpp 
+TARGET_LIB:= libnvdsinfer_jonghwanl_impl_Yolo.so
 
 TARGET_OBJS:= $(SRCFILES:.cpp=.o)
 TARGET_OBJS:= $(TARGET_OBJS:.cu=.o)

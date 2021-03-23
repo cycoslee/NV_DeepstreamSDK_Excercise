@@ -62,25 +62,27 @@ gpu-id=0
 net-scale-factor=0.0039215697906911373
 #0=RGB, 1=BGR
 model-color-format=0
-custom-network-config=yolov3-tiny.cfg
-model-file=yolov3-tiny.weights
-#model-engine-file=yolov3-tiny_b1_gpu0_fp32.engine
+#custom-network-config=yolov3-608.cfg
+#model-file=yolov3.weights
+model-engine-file=yolov3s_4_3_608_608_static_CUDA_INT8_gs.trt
 labelfile-path=labels.txt
+batch-size=4
+int8-calib-file=yolov3s_4_3_608_608_static_CUDA_INT8_gs.cache 
 ## 0=FP32, 1=INT8, 2=FP16 mode
-network-mode=0
+network-mode=1
 num-detected-classes=80
 gie-unique-id=1
 network-type=0
 is-classifier=0
 ## 0=Group Rectangles, 1=DBSCAN, 2=NMS, 3= DBSCAN+NMS Hybrid, 4 = None(No clustering)
-cluster-mode=2
+cluster-mode=0
 maintain-aspect-ratio=1
-parse-bbox-func-name=NvDsInferParseCustomYoloV3Tiny
-custom-lib-path=nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
+parse-bbox-func-name=NvDsInferParseCustomYoloJonghwanl_withNMS
+custom-lib-path=libnvdsinfer_jonghwanl_impl_Yolo.so
 engine-create-func-name=NvDsInferYoloCudaEngineGet
 #scaling-filter=0
 #scaling-compute-hw=0
 
 [class-attrs-all]
-nms-iou-threshold=0.3
-threshold=0.7
+nms-iou-threshold=0.6
+threshold=0.4

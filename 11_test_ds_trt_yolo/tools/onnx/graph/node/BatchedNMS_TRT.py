@@ -22,7 +22,7 @@ import numpy as np
 
 # BatchedNMS_TRT Plugin node class
 class BatchedNMS_TRT():
-    def __init__(self, params):
+    def __init__(self, params, dynamic_batch):
         self.plugin_name='BatchedNMS_TRT'
         self.shareLocation=1
         self.backgroundLabelId=-1
@@ -35,7 +35,7 @@ class BatchedNMS_TRT():
         self.isNormalized=1
         self.clipBoxes=1
         self.plugin_version=1
-        self.dynamicBatch=False
+        self.dynamicBatch=dynamic_batch
         self.attrs = self._create_attributes(params)
 
     # Prepare attributes for this BatchedNMS_TRT plugin
@@ -50,8 +50,6 @@ class BatchedNMS_TRT():
         self.iouThreshold      = params['iouThreshold']
         self.isNormalized      = params['isNormalized']
         self.clipBoxes         = params['clipBoxes']
-        self.dynamicBatch      = params['dynamicBatch']
-
         if self.dynamicBatch is True:
             self.plugin_name = 'BatchedNMSDynamic_TRT'
 
@@ -67,7 +65,6 @@ class BatchedNMS_TRT():
         attrs["clipBoxes"]         = self.clipBoxes
         attrs["plugin_version"]    = "1"
         print("Attrs :", attrs)
-
         return attrs
 
     # Graph Surgery - Add
@@ -76,7 +73,7 @@ class BatchedNMS_TRT():
         batch_size = graph.inputs[0].shape[0]
         input_h = graph.inputs[0].shape[2]
         input_w = graph.inputs[0].shape[3]
-        print("batch %d, width %d, height %d"%(batch_size, input_h, input_w))
+        print("width %d, height %d"%(input_h, input_w))
         print("target Plugin: %s"%(self.plugin_name))
 
         tensors = graph.tensors()

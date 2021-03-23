@@ -59,6 +59,11 @@ sync=0
 source-id=0
 gpu-id=0
 nvbuf-memory-type=0
+##1=mp4, 2=mkv
+#container=1
+##1=h264, 2=h265
+#codec=1 
+
 
 [osd]
 enable=1
@@ -96,11 +101,11 @@ nvbuf-memory-type=0
 ## the infer config file.
 [primary-gie]
 enable=1
-plugin-type=0
 gpu-id=0
-model-engine-file=yolov3_8_3_608_608_static_CUDA_INT8.trt
+model-engine-file=yolov3s_4_3_608_608_static_CUDA_INT8.trt
 labelfile-path=labels.txt
 batch-size=4
+
 #Required by the app for OSD, not a plugin property
 bbox-border-color0=1;0;0;1
 bbox-border-color1=0;1;1;1
@@ -111,11 +116,11 @@ gie-unique-id=1
 nvbuf-memory-type=0
 config-file=config_infer_primary_yoloV3.txt
 
-#[tracker]
-#enable=1
-#tracker-width=640
-#tracker-height=384
-#ll-lib-file=/opt/nvidia/deepstream/deepstream-5.1/lib/libnvds_mot_klt.so
+[tracker]
+enable=0
+tracker-width=512
+tracker-height=320
+ll-lib-file=/opt/nvidia/deepstream/deepstream-5.1/lib/libnvds_mot_klt.so
 
 [tests]
 file-loop=0
