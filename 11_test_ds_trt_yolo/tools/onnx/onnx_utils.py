@@ -25,6 +25,7 @@ import onnx_graphsurgeon as gs
 from onnx import helper
 from jsonschema import validate
 from tools.onnx.graph.node.BatchedNMS_TRT import BatchedNMS_TRT
+from tools.onnx.graph.node.SimplePAD_TRT import SimplePAD_TRT
 
 # ONNX version check function
 def onnx_version():
@@ -33,7 +34,7 @@ def onnx_version():
 # ONNX model loading function for TensorRT parser
 def load_onnx(model_name):
     print('Loading the ONNX file...')
-    onnx = ""
+
     if not os.path.isfile(model_name):
         raise SystemExit('ERROR: Could not find ONNX file in %s'%(model_name))
     else:
@@ -61,8 +62,25 @@ class GraphSurgery():
         self.dynamic_batch = dynamic_batch
         self._validate_requests()
 
+    def _simplify_node(self, i, node):
+        node_op = node.op
+        switcher = {
+                'Pad': SimplePAD_TRT
+        }
+        create_plugin = switcher.get(node_op)
+        if create_plugin == None:
+            print("This node does not need to be simplified!!!")
+        else:
+            plugin = create_plugin(self.graph, i)
+            self.graph = plugin.change_node()
+            print("%s op node has been simplified!!!"%node_op)
+
     def do_graph_surgeon(self):
         print("Getting new node params")
+
+        for i, node in enumerate( self.graph.nodes ):
+            self._simplify_node(i, node)
+
         for json_dict in self.req_json_dicts:
             print(json_dict)
             if 'add_node_req' in json_dict:
@@ -91,6 +109,9 @@ class GraphSurgery():
         with open(json_schema_file, "r") as sc_json:
             schema = json.loads(sc_json.read())
             sc_json.close()
+
+        if self.req_jsons is None:
+            self.req_jsons=[]
 
         for _json in self.req_jsons:
             with open(_json, "r") as req_json:

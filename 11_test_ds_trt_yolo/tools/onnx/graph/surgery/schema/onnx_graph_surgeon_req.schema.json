@@ -89,7 +89,7 @@
             	        "type": "object",
 		        "properties":{
 		    	"additionalProperties": false,
-	                    "shareLocation":     { "type": "number" },
+	                    "shareLocation":     { "type": "boolean" },
 	    	            "backgroundLabelId": { "type": "number" },
 	    	            "numClasses":        { "type": "number" },
 	    	            "numAnchors":        { "type": "number" },
@@ -97,8 +97,8 @@
 	    	            "keepTopK":          { "type": "number" },
 	    	            "scoreThreshold":    { "type": "number" },
 	    	            "iouThreshold":      { "type": "number" },
-	    	            "isNormalized":      { "type": "number" },
-	    	            "clipBoxes":         { "type": "number" },
+	    	            "isNormalized":      { "type": "boolean" },
+	    	            "clipBoxes":         { "type": "boolean" },
 	    	            "dynamicBatch":      { "type": "boolean"}
 		        },
 		        "minProperties": 11

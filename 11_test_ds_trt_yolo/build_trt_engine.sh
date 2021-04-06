@@ -28,128 +28,128 @@ python3 onnx_to_trt.py -i models/onnx/yolov3_8_3_608_608_static.onnx -p INT8 -c 
 python3 onnx_to_trt.py -i models/onnx/yolov3_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v 
 python3 onnx_to_trt.py -i models/onnx/yolov3_8_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 8 8 8 -v
 python3 onnx_to_trt.py -i models/onnx/yolov3_8_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 8 8 8 -v
-echo "[yolov3-608.gs.onnx] Build & export TRT model."
-python3 onnx_to_trt.py -i models/onnx/yolov3_8_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 8 8 8 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-python3 onnx_to_trt.py -i models/onnx/yolov3_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-python3 onnx_to_trt.py -i models/onnx/yolov3_8_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 8 8 8 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-python3 onnx_to_trt.py -i models/onnx/yolov3_8_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 8 8 8 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+echo "[yolov3-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3_8_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 8 8 8 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov3_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov3_8_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 8 8 8 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov3_8_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 8 8 8 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
 echo "[yolov3-608.onnx] Build & export TRT model."
 python3 onnx_to_trt.py -i models/onnx/yolov3_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v 
-echo "[yolov3-608.gs.onnx] Build & export TRT-1model."
-python3 onnx_to_trt.py -i models/onnx/yolov3_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+echo "[yolov3-608.onnx] Build & export TRT-1model."
+python3 onnx_to_trt.py -i models/onnx/yolov3_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
 
 
-#echo
-#echo
-#echo "[yolov3s-608.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
-#echo "[yolov3s-608.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+echo
+echo
+echo "[yolov3s-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
+echo "[yolov3s-608.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov3s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
 
 
-#echo
-#echo
-#echo "[yolov3-tiny-608.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v 
-#python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
-#echo "[yolov3-tiny-608.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#
-#
-#echo
-#echo
-#echo "[yolov3s-tiny-608.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
-#echo "[yolov3s-tiny-608.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#
-#
-#echo
-#echo
-#echo "[yolov3-608-dynamic.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v
-#echo "[yolov3-608-dynamic.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#
-#
-#echo
-#echo
-#echo "[yolov3-tiny-608-dynamic.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v
-#echo "[yolov3-tiny-608-dynamic.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#
-#
-#echo
-#echo
-#echo "[yolov4-608.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
-#echo "[yolov4-608.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#
-#
-#echo
-#echo
-#echo "[yolov4s-608.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
-#echo "[yolov4s-608.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#
-#
-#echo
-#echo
-#echo "[yolov4-tiny-608.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
-#echo "[yolov4-tiny-608.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#
-#
-#echo
-#echo
-#echo "[yolov4s-tiny-608.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
-#python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
-#echo "[yolov4s-tiny-608.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#
-#
-#echo
-#echo
-#echo "[yolov4-608.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v
-#echo "[yolov4-608.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
-#
-#
-#echo
-#echo
-#echo "[yolov4-tiny-608.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v
-#echo "[yolov4-tiny-608.gs.onnx] Build & export TRT model."
-#python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -s -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+echo
+echo
+echo "[yolov3-tiny-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_8_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 8 8 8 -v 
+python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
+echo "[yolov3-tiny-608.gs.onnx] Build & export TRT model."
+ython3 onnx_to_trt.py -i models/onnx/yolov3-tiny_8_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 8 8 8 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+
+
+echo
+echo
+echo "[yolov3s-tiny-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
+echo "[yolov3s-tiny-608.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov3s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+
+
+echo
+echo
+echo "[yolov3-608-dynamic.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v
+echo "[yolov3-608-dynamic.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+
+
+echo
+echo
+echo "[yolov3-tiny-608-dynamic.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v
+echo "[yolov3-tiny-608-dynamic.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov3-tiny_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+
+
+echo
+echo
+echo "[yolov4-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
+echo "[yolov4-608.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov4_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+
+
+echo
+echo
+echo "[yolov4s-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
+echo "[yolov4s-608.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov4s_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+
+
+echo
+echo
+echo "[yolov4-tiny-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
+echo "[yolov4-tiny-608.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+
+
+echo
+echo
+echo "[yolov4s-tiny-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v
+python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v
+echo "[yolov4s-tiny-608.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g CUDA -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA0 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+python3 onnx_to_trt.py -i models/onnx/yolov4s-tiny_4_3_608_608_static.onnx -p INT8 -c calib_database -g DLA1 -b 4 4 4 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+
+
+echo
+echo
+echo "[yolov4-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v
+echo "[yolov4-608.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json
+
+
+echo
+echo
+echo "[yolov4-tiny-608.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v
+echo "[yolov4-tiny-608.gs.onnx] Build & export TRT model."
+python3 onnx_to_trt.py -i models/onnx/yolov4-tiny_-1_3_608_608_dynamic.onnx -p INT8 -c calib_database -g CUDA -b 4 6 8 -v -j tools/onnx/graph/surgery/add_batchedNMSPlugin.json

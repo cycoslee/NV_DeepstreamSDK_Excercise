@@ -32,8 +32,8 @@ class BatchedNMS_TRT():
         self.keepTopK=200
         self.scoreThreshold=0.4
         self.iouThreshold=0.6
-        self.isNormalized=1
-        self.clipBoxes=1
+        self.isNormalized=True
+        self.clipBoxes=True
         self.plugin_version=1
         self.dynamicBatch=dynamic_batch
         self.attrs = self._create_attributes(params)
@@ -50,8 +50,9 @@ class BatchedNMS_TRT():
         self.iouThreshold      = params['iouThreshold']
         self.isNormalized      = params['isNormalized']
         self.clipBoxes         = params['clipBoxes']
-        if self.dynamicBatch is True:
-            self.plugin_name = 'BatchedNMSDynamic_TRT'
+        #if self.dynamicBatch is True:
+        #    self.plugin_name = 'BatchedNMSDynamic_TRT'
+        self.plugin_name = 'BatchedNMSDynamic_TRT'
 
         attrs= {}
         attrs["shareLocation"]     = self.shareLocation

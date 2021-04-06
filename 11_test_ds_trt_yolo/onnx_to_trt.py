@@ -43,8 +43,7 @@ def main():
     """Create a TensorRT engine for ONNX-based Model."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '-i', '--input_model', type=str, required=True,
-        help=('Put the ONNX model that you want to convert to TRT engine.'
+        '-i', '--input_model', type=str, required=True, help=('Put the ONNX model that you want to convert to TRT engine.'
               'models/onnx/yolov3_b_ch_h_w.onnx'))
     parser.add_argument(
         '-p', '--precision', type=str, required=True,
@@ -70,12 +69,6 @@ def main():
         '-v', '--verbose', action='store_true',
         help='Enable verbose output logs (for debug)')
     parser.add_argument(
-        '-s','--graph_surgoen', default=False, action="store_true",
-        help=('Flag to do graph surgeon on target graph'
-                '(Check this example''s trt_plugin/onnx_graph_surgeon folder'
-                ' you can find how the graph surgeon and TensorRT plugin could'
-                ' be applied by just by json request format'))
-    parser.add_argument(
         '-j', '--json_for_surgery', nargs='+', type=str,
         help=('Put the json file of ONNX graph surgery requestion format to Add|Remove|Change'
               'node to the target graph before generate TensorRT engine'))
@@ -94,29 +87,25 @@ def main():
         if "DLA" in args.gpu_core:
             parser.error("For DLA, batch should be ( MIN == OPT == MAX)")
         dynamic_batch = True
+        print("Dynamic Batch On  !!!")
+    else:
+        print("Dynamic batch Off !!!")
 
     # Version Checking
     print("ONNX version: %s" % onnx_version())
     print("TensorRT version: %s" % tensorrt_version())
 
+    model_file = args.input_model
+
     # If ONNX graph surgeon option        
-    if args.graph_surgoen == True:
-        if args.json_for_surgery == '':
-            raise SystemExit('ERROR: failed to find Graph Surgery request format json file.')
-        else:
-            # Graph Surgeon 
-            print("Graph surgery has been requested by JSON files: \n", args.json_for_surgery)
-            gs = GraphSurgery(args.input_model, args.json_for_surgery, dynamic_batch)
+    # Graph Surgeon
+    if args.json_for_surgery != "":
+        print("Graph surgery has been requested by JSON files: \n", args.json_for_surgery)
+    gs = GraphSurgery(model_file, args.json_for_surgery, dynamic_batch)
+    gs.do_graph_surgeon()
+    onnx_model = gs.get_onnx_model()
 
-            if gs.do_graph_surgeon() is False :
-                raise ValueError('ERROR: Graph Surgeon Failed')
-
-            onnx_model = gs.get_onnx_model()
-    else:
-        # load onnx function call
-        onnx_model = load_onnx(args.input_model)
-
-    model_name = args.input_model.split('.onnx')[0].split('/')[-1]
+    model_name = model_file.split('.onnx')[0].split('/')[-1]
     input_dim = get_input_dim(model_name)
     print("Input_dim: ", input_dim)
 
@@ -124,12 +113,11 @@ def main():
     calib_path  = "trt_output/calib/"
     engine_name = model_name + "_" + args.gpu_core + "_" + args.precision
 
-    gs = ""
-    if args.graph_surgoen is True:
-        gs = "_gs"
+    if args.json_for_surgery != "":
+        engine_name = engine_name + ".gs"
 
-    calib_name  = engine_name + gs + ".cache"
-    engine_name = engine_name + gs + ".trt"
+    calib_name  = engine_name + ".cache"
+    engine_name = engine_name + ".trt"
 
     os.makedirs(engine_path, exist_ok=True)
     os.makedirs(calib_path, exist_ok=True)

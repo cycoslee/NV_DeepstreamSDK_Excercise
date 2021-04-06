@@ -141,7 +141,6 @@ extern "C" bool NvDsInferParseCustomYoloJonghwanl(
     assert(detectionParams.numClassesConfigured == scores.inferDims.d[1]);  // The second dimension should be num_classes
 
     uint num_bboxes = boxes.inferDims.d[0];
-    std::cout << "Network Info: [" << networkInfo.height << ", " << networkInfo.width << "]" << std::endl;
 
     std::vector<NvDsInferParseObjectInfo> outObjs =
         decodeYoloJonghwanlTensor((const float*)(boxes.buffer), (const float*)(scores.buffer),\
@@ -165,7 +164,7 @@ extern "C" bool NvDsInferParseCustomYoloJonghwanl_withNMS(
     const int* num_detections = static_cast <const int*>(outputLayersInfo.at(0).buffer);   // [batch_size, 1]
     const float* nms_boxes    = static_cast <const float*>(outputLayersInfo.at(1).buffer); // [batch_size, keepTopK, 4]
     const float* nms_scores   = static_cast <const float*>(outputLayersInfo.at(2).buffer); // [batch_size, keepTopK]
-    const float* nms_classes  = static_cast <const float*>(outputLayersInfo.at(3).buffer); // [batch_size, keepTopK]
+    //const float* nms_classes  = static_cast <const float*>(outputLayersInfo.at(3).buffer); // [batch_size, keepTopK]
 
     uint netW = networkInfo.width;
     uint netH = networkInfo.height;
@@ -175,28 +174,19 @@ extern "C" bool NvDsInferParseCustomYoloJonghwanl_withNMS(
         NvDsInferParseObjectInfo box;
 	const float* _rect  = &nms_boxes[0]   + (i * 4);
 	const float* _score = &nms_scores[0]  + i;
-	const float* _class = &nms_classes[0] + i;
-    
+	//const float* _class = &nms_classes[0] + i;
 	// Restore coordinates to network input resolution
-        float x1 = _rect[0];
-        float y1 = _rect[1];
-        float x2 = _rect[2];
-        float y2 = _rect[3];
-
-        x1 = clamp(x1, 0, netW);
-        y1 = clamp(y1, 0, netH);
-        x2 = clamp(x2, 0, netW);
-        y2 = clamp(y2, 0, netH);
+        float x1 = _rect[0] * netW; 
+        float y1 = _rect[1] * netH;
+        float x2 = _rect[2] * netW;
+        float y2 = _rect[3] * netH;
+        float maxProb = 0.0f;
+        int maxIndex = -1;
 
         box.left = x1;
         box.width = clamp(x2 - x1, 0, netW);
         box.top = y1;
         box.height = clamp(y2 - y1, 0, netH);
-
-        if (box.width < 1 || box.height < 1) return false;
-
-        float maxProb = 0.0f;
-        int maxIndex = -1;
 
         for (uint c = 0; c < detectionParams.numClassesConfigured; ++c) {
             float prob = _score[score_location + c];
@@ -205,9 +195,7 @@ extern "C" bool NvDsInferParseCustomYoloJonghwanl_withNMS(
                 maxIndex = c;
             }
         }
-
         score_location += detectionParams.numClassesConfigured;
-
         box.detectionConfidence = maxProb;
         box.classId = maxIndex;
 

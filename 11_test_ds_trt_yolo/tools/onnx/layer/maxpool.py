@@ -47,6 +47,6 @@ class MaxPool(nn.Module):
         else:
             padding3 = (self.size - 1) // 2
             padding4 = padding3
-        x = max_pool2d(pad(x, (padding3, padding4, padding1, padding2), mode='replicate'),
+        x = max_pool2d(pad(x, (padding3, padding4, padding1, padding2), mode='constant', value=0),
                          self.size, stride=self.stride)
         return x
